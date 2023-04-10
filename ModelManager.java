@@ -12,6 +12,7 @@ public class ModelManager {
     private final TicTacToe controller;
     private int[][] board;
     private int turn; // this will keep track of the turn
+    private int winner;
     
     
     
@@ -22,6 +23,7 @@ public class ModelManager {
         CROSS = controller.CROSS;
         board = new int[3][3];
         turn = CROSS;
+        winner = EMPTY;
         fillBoard();
     }
     
@@ -67,18 +69,6 @@ public class ModelManager {
            if(checkInput(num)){
                board[row][col] = num;
                controller.incrementMoveNum();
-               int moveNum = controller.getMoveNum();
-               if(moveNum > 4){
-                   int winner = checkBoard();
-                   if(winner != EMPTY){
-                       if(winner == CIRCLE){ controller.won(CIRCLE); }
-                       else { controller.won(CROSS); }
-                      
-                   }
-                   if(winner == EMPTY && moveNum == 9){
-                       controller.tie();
-                   }
-               }
                incrementTurn();
                return true;
            } 
@@ -89,30 +79,39 @@ public class ModelManager {
     
     /**
      * Method to check if game is over by checking the rows and columns and diagonals for three in a row
-     * @return if someone has one will return the number that represents that player or will return EMPTY value
      */
-    public int checkBoard(){
-        // Check the rows
-        for(int i = 0; i < 3; i++){
-            if( (board[i][0]==board[i][1]) && (board[i][1]==board[i][2]) && (board[i][0] != EMPTY)){
-                return board[i][0];
+    public void checkBoard(){
+        if(controller.getMoveNum() > 4){
+
+            // Check the rows
+            for(int i = 0; i < 3; i++){
+                if( (board[i][0]==board[i][1]) && (board[i][1]==board[i][2]) && (board[i][0] != EMPTY)){
+                    winner = board[i][0];
+                    controller.won(board[i][0]);
+                }
+            }
+            // Check the columns
+            for(int j = 0; j < 3; j++){
+                if( (board[0][j]==board[1][j]) && (board[1][j]==board[2][j]) && (board[0][j] != EMPTY)){
+                    
+                    controller.won(board[0][j]);
+                }
+            }
+            // Check the diagonals
+            if( (board[0][0]==board[1][1]) && (board[1][1]==board[2][2]) && (board[0][0] != EMPTY)){
+                winner = board[0][0];
+                controller.won(board[0][0]);
+            }
+            if( (board[2][0]==board[1][1]) && (board[1][1]==board[0][2]) && (board[1][1] != EMPTY)){
+                winner = board[1][1];
+                controller.won(board[1][1]);
+            }
+            //checking for tie
+            if(winner == EMPTY && controller.getMoveNum() == 9){
+                controller.tie();
             }
         }
-        // Check the columns
-        for(int j = 0; j < 3; j++){
-            if( (board[0][j]==board[1][j]) && (board[1][j]==board[2][j]) && (board[0][j] != EMPTY)){
-                return board[0][j];
-            }
-        }
-        // Check the diagonals
-        if( (board[0][0]==board[1][1]) && (board[1][1]==board[2][2]) && (board[0][0] != EMPTY)){
-            return board[0][0];
-        }
-        if( (board[2][0]==board[1][1]) && (board[1][1]==board[0][2]) && (board[1][1] != EMPTY)){
-            return board[1][1];
-        }
-        // returning empty if no one has won yet
-        return EMPTY;
+        
     }
  
     public void incrementTurn(){
@@ -122,4 +121,9 @@ public class ModelManager {
     
     public int getTurn(){ return turn; }
    
+    public void resetGame(){
+        turn = CROSS;
+        winner = EMPTY;
+        fillBoard();
+    }
 }

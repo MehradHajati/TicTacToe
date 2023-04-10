@@ -59,6 +59,7 @@ public class ViewManager implements ActionListener{
         label.setForeground(new Color(25, 255, 0));
         label.setFont(new Font("Ink Free", Font.BOLD, 75));
         label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
         label.setText("Tic Tac Toe");
         label.setOpaque(true);
         
@@ -117,6 +118,7 @@ public class ViewManager implements ActionListener{
                             buttons[i][j].setText("X");
                             updateTurnText();
                         }
+                        controller.checkBoard();
                     }
                     else{ // here the button pressed is not empty
                         JOptionPane.showMessageDialog(frame,"That spot is already filled","Full Spot",JOptionPane.ERROR_MESSAGE);
@@ -138,7 +140,7 @@ public class ViewManager implements ActionListener{
         else{ 
             JOptionPane.showMessageDialog(frame,"Cross won the game","Winner Winner Chicken Dinner",JOptionPane.INFORMATION_MESSAGE);
         }
-        //resetGame();
+        resetGame();
     }
     
     
@@ -147,6 +149,24 @@ public class ViewManager implements ActionListener{
      */
     public void tie(){
         JOptionPane.showMessageDialog(frame,"The game is a tie","Tie",JOptionPane.INFORMATION_MESSAGE);
-        //resetGame();
+        resetGame();
     }
+
+    
+    /**
+     * Method to reset the game
+     */
+    public void resetGame(){
+        deleteObjects();
+        createObjects();
+        controller.resetGame();
+    }
+
+    /**
+     * Method to delete objects when creating a new game
+     */
+    public void deleteObjects(){
+        frame.dispose();
+    }
+
 }

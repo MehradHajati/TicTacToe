@@ -3,7 +3,7 @@ package tictactoe;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * 2 Player TicTacToe game
  * @author Mehrad Hajati
  */
 public class TicTacToe {
@@ -13,7 +13,6 @@ public class TicTacToe {
     public final int CROSS = 1;
     public final int CIRCLE = 2;
     private int moveNum = 0;
-    private int won = 0;
     private ModelManager model;
     private ViewManager view;
     
@@ -46,5 +45,7 @@ public class TicTacToe {
     
     // Wrapper Methods for ModelManager
     public boolean fillSpot(int num, int row, int col){ return model.fillSpot(num, row, col); }
+    public void resetGame() { moveNum = 0; model.resetGame(); }
+    public void checkBoard(){ model.checkBoard(); }
     
 }
